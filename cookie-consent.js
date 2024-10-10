@@ -33,7 +33,7 @@
 
     // Function to handle consent update
     function updateConsent() {
-        const cookieBanner = document.getElementById('cookie-consent');
+        const cookieBanner = document.getElementById('cookie-consent-banner');
 
         const preferencesGranted = document.querySelector('.preferences-checkbox').checked;
         const statisticsGranted = document.querySelector('.statistics-checkbox').checked;
@@ -67,13 +67,13 @@
     // Show the cookie consent banner if consent hasn't been given
     window.addEventListener('DOMContentLoaded', function () {
         if (!localStorage.getItem('preferences_storage')) {
-            document.getElementById('cookie-consent').classList.remove('hidden');
+            document.getElementById('cookie-consent-banner').classList.remove('hidden');
         }
 
         // Set event listeners for buttons after DOM is fully loaded
         document.querySelector('.accept-cookies').addEventListener('click', updateConsent);
         document.querySelector('.manage-cookies').addEventListener('click', function () {
-            const cookieBanner = document.getElementById('cookie-consent');
+            const cookieBanner = document.getElementById('cookie-consent-banner');
             cookieBanner.classList.toggle('hidden');
         });
     });
