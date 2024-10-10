@@ -1,10 +1,10 @@
 <script>
     // Function to load scripts dynamically based on data attributes
-    function loadScripts(googleId, metaId, zohoId) {
+    function loadScripts(googleId, metaId, zohoScriptURL) {
         // Load Google script
         if (googleId) {
             const googleScript = document.createElement('script');
-            googleScript.src = https://www.googletagmanager.com/gtag/js?id=${googleId};
+            googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
             document.head.appendChild(googleScript);
 
             const googleGtag = document.createElement('script');
@@ -19,14 +19,14 @@
         // Load Meta script
         if (metaId) {
             const metaScript = document.createElement('script');
-            metaScript.src = https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1;
+            metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
             document.head.appendChild(metaScript);
         }
 
-        // Load Zoho script
-        if (zohoId) {
+        // Load Zoho script (tracking link instead of simple ID)
+        if (zohoScriptURL) {
             const zohoScript = document.createElement('script');
-            zohoScript.src = https://js.zohostatic.com/zoho.js?${zohoId};
+            zohoScript.src = zohoScriptURL;
             document.head.appendChild(zohoScript);
         }
     }
@@ -52,10 +52,10 @@
         // Load tracking scripts conditionally
         const googleId = cookieBanner.getAttribute('data-google-id');
         const metaId = cookieBanner.getAttribute('data-meta-id');
-        const zohoId = cookieBanner.getAttribute('data-zoho-id');
+        const zohoScriptURL = cookieBanner.getAttribute('data-zoho-script'); // Notice that this is now treated as a script URL, not an ID
 
         if (marketingGranted) {
-            loadScripts(googleId, metaId, zohoId);
+            loadScripts(googleId, metaId, zohoScriptURL);
         } else {
             alert('Please allow marketing cookies to view this content.');
         }
@@ -65,14 +65,16 @@
     }
 
     // Show the cookie consent banner if consent hasn't been given
-    if (!localStorage.getItem('preferences_storage')) {
-        document.getElementById('cookie-consent').classList.remove('hidden');
-    }
+    window.addEventListener('DOMContentLoaded', function () {
+        if (!localStorage.getItem('preferences_storage')) {
+            document.getElementById('cookie-consent').classList.remove('hidden');
+        }
 
-    // Set event listeners for buttons
-    document.querySelector('.accept-cookies').addEventListener('click', updateConsent);
-    document.querySelector('.manage-cookies').addEventListener('click', function () {
-        const cookieBanner = document.getElementById('cookie-consent');
-        cookieBanner.classList.toggle('hidden');
+        // Set event listeners for buttons after DOM is fully loaded
+        document.querySelector('.accept-cookies').addEventListener('click', updateConsent);
+        document.querySelector('.manage-cookies').addEventListener('click', function () {
+            const cookieBanner = document.getElementById('cookie-consent');
+            cookieBanner.classList.toggle('hidden');
+        });
     });
 </script>
