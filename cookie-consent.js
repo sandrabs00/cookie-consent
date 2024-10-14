@@ -1,4 +1,5 @@
 <script>
+    console.log('Script loaded successfully');
     // Function to load scripts dynamically based on data attributes
     function loadScripts(googleId, metaId, zohoScriptURL) {
         // Load Google script
