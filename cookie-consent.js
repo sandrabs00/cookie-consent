@@ -1,9 +1,10 @@
 <script>
-    
+    console.log('Script loaded successfully');
     // Function to load scripts dynamically based on data attributes
     function loadScripts(googleId, metaId, zohoScriptURL) {
         // Load Google script
         if (googleId) {
+            console.log('Google ok');
             const googleScript = document.createElement('script');
             googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
             document.head.appendChild(googleScript);
@@ -19,6 +20,7 @@
 
         // Load Meta script
         if (metaId) {
+            console.log('meta ok')
             const metaScript = document.createElement('script');
             metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
             document.head.appendChild(metaScript);
@@ -26,6 +28,7 @@
 
         // Load Zoho script (tracking link instead of simple ID)
         if (zohoScriptURL) {
+            console.log('zoho ok')
             const zohoScript = document.createElement('script');
             zohoScript.src = zohoScriptURL;
             document.head.appendChild(zohoScript);
