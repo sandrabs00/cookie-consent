@@ -40,7 +40,7 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
 
 // Function to handle consent update
 function updateConsent() {
-    const cookieBanner = document.getElementById('cookie-consent-banner');
+    const cookieBanner = document.getElementById('cookie-banner'); // Updated to use 'cookie-banner'
 
     // Check if the cookie banner exists
     if (!cookieBanner) {
@@ -48,9 +48,10 @@ function updateConsent() {
         return;
     }
 
-    const preferencesGranted = document.querySelector('.preferences-checkbox')?.checked || false;
-    const statisticsGranted = document.querySelector('.statistics-checkbox')?.checked || false;
-    const marketingGranted = document.querySelector('.marketing-checkbox')?.checked || false;
+    // Targeting each checkbox input inside its container
+    const preferencesGranted = document.querySelector('.preferences-checkbox input')?.checked || false;
+    const statisticsGranted = document.querySelector('.statistics-checkbox input')?.checked || false;
+    const marketingGranted = document.querySelector('.marketing-checkbox input')?.checked || false;
 
     // Log consent choices
     console.log('Preferences Granted:', preferencesGranted);
@@ -80,7 +81,7 @@ function updateConsent() {
 
 // Show the cookie consent banner if consent hasn't been given
 window.addEventListener('DOMContentLoaded', function () {
-    const cookieBanner = document.getElementById('cookie-consent-banner');
+    const cookieBanner = document.getElementById('cookie-banner'); // Updated to 'cookie-banner'
 
     // Check if the cookie banner element exists and show it if needed
     if (!localStorage.getItem('preferences_storage') && cookieBanner) {
@@ -91,18 +92,39 @@ window.addEventListener('DOMContentLoaded', function () {
     // Set event listeners for buttons after DOM is fully loaded
     document.querySelector('.accept-cookies')?.addEventListener('click', updateConsent);
     document.querySelector('.manage-cookies')?.addEventListener('click', function () {
-        const cookieBanner = document.getElementById('cookie-consent-banner');
+        const cookieBanner = document.getElementById('cookie-banner'); // Updated to 'cookie-banner'
         if (cookieBanner) {
             cookieBanner.classList.toggle('hidden');
             console.log('Cookie banner toggled');
         }
     });
 
-    // Disable and check the necessary checkbox
-    const necessaryCheckbox = document.querySelector('.necessary-checkbox');
+    // Disable and check each necessary checkbox inside its container
+    const necessaryCheckbox = document.querySelector('.necessary-checkbox input');
     if (necessaryCheckbox) {
         necessaryCheckbox.checked = true;
         necessaryCheckbox.disabled = true;  // Disable the checkbox
         console.log('Necessary cookies checkbox is checked and disabled');
+    }
+
+    // Disable and check each preferences checkbox inside its container
+    const preferencesCheckbox = document.querySelector('.preferences-checkbox input');
+    if (preferencesCheckbox) {
+        preferencesCheckbox.disabled = false;
+        console.log('Preferences checkbox is enabled for user choice');
+    }
+
+    // Disable and check each statistics checkbox inside its container
+    const statisticsCheckbox = document.querySelector('.statistics-checkbox input');
+    if (statisticsCheckbox) {
+        statisticsCheckbox.disabled = false;
+        console.log('Statistics checkbox is enabled for user choice');
+    }
+
+    // Disable and check each marketing checkbox inside its container
+    const marketingCheckbox = document.querySelector('.marketing-checkbox input');
+    if (marketingCheckbox) {
+        marketingCheckbox.disabled = false;
+        console.log('Marketing checkbox is enabled for user choice');
     }
 });
