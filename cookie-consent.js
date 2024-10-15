@@ -14,7 +14,8 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${googleId}');`;
+            gtag('config', '${googleId}');
+            console.log('Google gtag configuration triggered');`;
         document.head.appendChild(googleGtag);
     }
 
@@ -24,6 +25,7 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         const metaScript = document.createElement('script');
         metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
         document.head.appendChild(metaScript);
+        console.log('Meta script appended');
     }
 
     // Load Zoho script (tracking link instead of simple ID)
@@ -32,6 +34,7 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         const zohoScript = document.createElement('script');
         zohoScript.src = zohoScriptURL;
         document.head.appendChild(zohoScript);
+        console.log('Zoho script appended');
     }
 }
 
@@ -67,11 +70,12 @@ function updateConsent() {
     if (marketingGranted) {
         loadScripts(googleId, metaId, zohoScriptURL);
     } else {
-        alert('Please allow marketing cookies to view this content.');
+        console.warn('Marketing cookies not granted, skipping script loading.');
     }
 
     // Hide the cookie banner
-    cookieBanner.classList.add('hidden');
+    cookieBanner.classList.add('hidden');  // Hides the banner
+    console.log('Cookie banner hidden');
 }
 
 // Show the cookie consent banner if consent hasn't been given
@@ -81,6 +85,7 @@ window.addEventListener('DOMContentLoaded', function () {
     // Check if the cookie banner element exists and show it if needed
     if (!localStorage.getItem('preferences_storage') && cookieBanner) {
         cookieBanner.classList.remove('hidden');
+        console.log('Cookie banner displayed');
     }
 
     // Set event listeners for buttons after DOM is fully loaded
@@ -89,6 +94,15 @@ window.addEventListener('DOMContentLoaded', function () {
         const cookieBanner = document.getElementById('cookie-consent-banner');
         if (cookieBanner) {
             cookieBanner.classList.toggle('hidden');
+            console.log('Cookie banner toggled');
         }
     });
+
+    // Disable and check the necessary checkbox
+    const necessaryCheckbox = document.querySelector('.necessary-checkbox');
+    if (necessaryCheckbox) {
+        necessaryCheckbox.checked = true;
+        necessaryCheckbox.disabled = true;  // Disable the checkbox
+        console.log('Necessary cookies checkbox is checked and disabled');
+    }
 });
