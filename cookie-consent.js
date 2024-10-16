@@ -5,6 +5,7 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
     console.log(`Google ID: ${googleId}`);
     console.log(`Meta ID: ${metaId}`);
     console.log(`Zoho URL: ${zohoScriptURL}`);
+
     // Load Google script
     if (googleId) {
         console.log('Google script is being loaded');
@@ -47,6 +48,14 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         };
         document.head.appendChild(zohoScript);
         console.log('Zoho script appended');
+
+        // Push page view event to the data layer for Zoho
+        window.dataLayer.push({
+            'event': 'pageview',
+            'pagePath': window.location.pathname,
+            'pageTitle': document.title,
+        });
+        console.log('Page view event pushed to data layer for Zoho');
     }
 }
 
