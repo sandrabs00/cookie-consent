@@ -2,8 +2,9 @@ console.log('Script loaded successfully');
 
 // Function to load scripts dynamically based on data attributes
 function loadScripts(googleId, metaId, zohoScriptURL) {
-       console.log(`Google ID: ${googleId}`);
+    console.log(`Google ID: ${googleId}`);
     console.log(`Meta ID: ${metaId}`);
+    
     // Load Google script
     if (googleId) {
         console.log('Google script is being loaded');
@@ -49,6 +50,21 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
     }
 }
 
+// Function to push consent to GTM dataLayer
+function pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted) {
+    window.dataLayer = window.dataLayer || [];
+    
+    // Push the consent status to GTM
+    window.dataLayer.push({
+        'event': 'cookie_consent_update',
+        'preferences_storage': preferencesGranted ? 'granted' : 'denied',
+        'analytics_storage': statisticsGranted ? 'granted' : 'denied',
+        'ad_storage': marketingGranted ? 'granted' : 'denied'
+    });
+    
+    console.log('Consent data pushed to GTM Data Layer');
+}
+
 // Function to handle consent update
 function updateConsent() {
     const cookieBanner = document.getElementById('cookie-banner');
@@ -74,12 +90,14 @@ function updateConsent() {
     localStorage.setItem('analytics_storage', statisticsGranted ? 'granted' : 'denied');
     localStorage.setItem('ad_storage', marketingGranted ? 'granted' : 'denied');
 
-    // Load tracking scripts conditionally
-    const googleId = cookieBanner.getAttribute('data-google-id');
-    const metaId = cookieBanner.getAttribute('data-meta-id');
-    const zohoScriptURL = cookieBanner.getAttribute('data-zoho-script');
+    // Push consent status to GTM Data Layer
+    pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted);
 
+    // Load tracking scripts conditionally based on Marketing consent
     if (marketingGranted) {
+        const googleId = cookieBanner.getAttribute('data-google-id');
+        const metaId = cookieBanner.getAttribute('data-meta-id');
+        const zohoScriptURL = cookieBanner.getAttribute('data-zoho-script');
         loadScripts(googleId, metaId, zohoScriptURL);
     } else {
         console.warn('Marketing cookies not granted, skipping script loading.');
