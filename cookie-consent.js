@@ -6,7 +6,7 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
     console.log(`Meta ID: ${metaId}`);
     // Load Google script
     if (googleId) {
-        console.log('Google script is being loaded'${googleId});
+        console.log('Google script is being loaded');
         const googleScript = document.createElement('script');
         googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
         googleScript.onerror = function() {
