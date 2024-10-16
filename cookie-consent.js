@@ -2,9 +2,11 @@ console.log('Script loaded successfully');
 
 // Function to load scripts dynamically based on data attributes
 function loadScripts(googleId, metaId, zohoScriptURL) {
+       console.log(`Google ID: ${googleId}`);
+    console.log(`Meta ID: ${metaId}`);
     // Load Google script
     if (googleId) {
-        console.log('Google script is being loaded');
+        console.log('Google script is being loaded'${googleId});
         const googleScript = document.createElement('script');
         googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
         googleScript.onerror = function() {
