@@ -117,6 +117,16 @@ function updateConsent() {
     console.log('Cookie banner hidden');
 }
 
+// Function to check for zpcookie_json and call the show method
+function checkAndShowZpCookie() {
+    if (typeof zpcookie_json !== 'undefined') {
+        _zcBan.show(zpcookie_json);
+    } else {
+        console.warn('zpcookie_json is not ready, retrying...');
+        setTimeout(checkAndShowZpCookie, 100); // Retry after 100ms
+    }
+}
+
 // Ensure DOM is loaded before running the script
 window.addEventListener('DOMContentLoaded', function () {
     const cookieBanner = document.getElementById('cookie-banner'); 
@@ -153,4 +163,8 @@ window.addEventListener('DOMContentLoaded', function () {
     if (preferencesCheckbox) preferencesCheckbox.disabled = false;
     if (statisticsCheckbox) statisticsCheckbox.disabled = false;
     if (marketingCheckbox) marketingCheckbox.disabled = false;
+
+    // Call the function to check and show the cookie banner
+    checkAndShowZpCookie();
 });
+
