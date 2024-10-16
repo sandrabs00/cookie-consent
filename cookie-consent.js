@@ -4,7 +4,7 @@ console.log('Script loaded successfully');
 function loadScripts(googleId, metaId, zohoScriptURL) {
     console.log(`Google ID: ${googleId}`);
     console.log(`Meta ID: ${metaId}`);
-    console.log(`Meta ID: ${zohoScriptURL}`);
+    console.log(`Zoho URL: ${zohoScriptURL}`);
     // Load Google script
     if (googleId) {
         console.log('Google script is being loaded');
