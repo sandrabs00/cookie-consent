@@ -25,8 +25,8 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         document.head.appendChild(googleScript);
     }
 
-    // Load Meta script
-    if (metaId) {
+    // Load Meta script only if fbq is not already loaded
+    if (metaId && !window.fbq) {
         console.log('Meta script is being loaded');
         const metaScript = document.createElement('script');
         metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
@@ -56,6 +56,8 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
             console.error('Failed to load Meta script');
         };
         document.head.appendChild(metaScript);
+    } else if (window.fbq) {
+        console.log('Meta Pixel is already loaded, skipping duplicate load');
     }
 
     // Load Zoho script (tracking link instead of simple ID)
