@@ -11,19 +11,18 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         console.log('Google script is being loaded');
         const googleScript = document.createElement('script');
         googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
-        googleScript.onerror = function() {
+        googleScript.onload = function () {
+            console.log('Google script loaded successfully');
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', googleId);
+            console.log('Google gtag configuration triggered');
+        };
+        googleScript.onerror = function () {
             console.error('Failed to load Google script');
         };
         document.head.appendChild(googleScript);
-
-        const googleGtag = document.createElement('script');
-        googleGtag.innerHTML = `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${googleId}');
-            console.log('Google gtag configuration triggered');`;
-        document.head.appendChild(googleGtag);
     }
 
     // Load Meta script
@@ -31,11 +30,32 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         console.log('Meta script is being loaded');
         const metaScript = document.createElement('script');
         metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
-        metaScript.onerror = function() {
+        metaScript.onload = function () {
+            console.log('Meta script loaded successfully');
+            !function (f, b, e, v, n, t, s) {
+                if (f.fbq) return; n = f.fbq = function () {
+                    n.callMethod ?
+                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                };
+                if (!f._fbq) f._fbq = n;
+                n.push = n;
+                n.loaded = !0;
+                n.version = '2.0';
+                n.queue = [];
+                t = b.createElement(e);
+                t.async = !0;
+                t.src = v;
+                s = b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t, s);
+            }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', metaId);  // Correct ID is dynamically loaded
+            fbq('track', 'PageView');
+            console.log('Meta Pixel initialized and PageView tracked');
+        };
+        metaScript.onerror = function () {
             console.error('Failed to load Meta script');
         };
         document.head.appendChild(metaScript);
-        console.log('Meta script appended');
     }
 
     // Load Zoho script (tracking link instead of simple ID)
@@ -43,19 +63,20 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         console.log('Zoho script is being loaded');
         const zohoScript = document.createElement('script');
         zohoScript.src = zohoScriptURL;
-        zohoScript.onerror = function() {
+        zohoScript.onload = function () {
+            console.log('Zoho script loaded successfully');
+            // Push page view event to the data layer for Zoho
+            window.dataLayer.push({
+                'event': 'pageview',
+                'pagePath': window.location.pathname,
+                'pageTitle': document.title,
+            });
+            console.log('Page view event pushed to data layer for Zoho');
+        };
+        zohoScript.onerror = function () {
             console.error('Failed to load Zoho script');
         };
         document.head.appendChild(zohoScript);
-        console.log('Zoho script appended');
-
-        // Push page view event to the data layer for Zoho
-        window.dataLayer.push({
-            'event': 'pageview',
-            'pagePath': window.location.pathname,
-            'pageTitle': document.title,
-        });
-        console.log('Page view event pushed to data layer for Zoho');
     }
 }
 
@@ -167,4 +188,3 @@ window.addEventListener('DOMContentLoaded', function () {
     // Call the function to check and show the cookie banner
     checkAndShowZpCookie();
 });
-
