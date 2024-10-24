@@ -1,10 +1,14 @@
 console.log('Script loaded successfully');
 
 // Function to load scripts dynamically based on data attributes
-function loadScripts(googleId, metaId, zohoScriptURL) {
+function loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL, linkedinId, tiktokPixelId) {
     console.log(`Google ID: ${googleId}`);
     console.log(`Meta ID: ${metaId}`);
     console.log(`Zoho URL: ${zohoScriptURL}`);
+    console.log(`Hotjar ID: ${hotjarId}`);
+    console.log(`YouTube URL: ${youtubeScriptURL}`);
+    console.log(`LinkedIn ID: ${linkedinId}`);
+    console.log(`TikTok Pixel ID: ${tiktokPixelId}`);
 
     // Load Google script
     if (googleId) {
@@ -81,6 +85,71 @@ function loadScripts(googleId, metaId, zohoScriptURL) {
         document.head.appendChild(zohoScript);
     }
 }
+     // Load Hotjar script
+    if (hotjarId) {
+        console.log('Hotjar script is being loaded');
+        const hotjarScript = document.createElement('script');
+        hotjarScript.src = `https://static.hotjar.com/c/hotjar-${hotjarId}.js?sv=6`;
+        hotjarScript.onload = function () {
+            console.log('Hotjar script loaded successfully');
+            window.hj = window.hj || function () { (hj.q = hj.q || []).push(arguments) };
+            hj('trigger', hotjarId);
+        };
+        hotjarScript.onerror = function () {
+            console.error('Failed to load Hotjar script');
+        };
+        document.head.appendChild(hotjarScript);
+    }
+
+    // Load YouTube embed API (if needed)
+    if (youtubeScriptURL) {
+        console.log('YouTube script is being loaded');
+        const youtubeScript = document.createElement('script');
+        youtubeScript.src = youtubeScriptURL;
+        youtubeScript.onload = function () {
+            console.log('YouTube script loaded successfully');
+        };
+        youtubeScript.onerror = function () {
+            console.error('Failed to load YouTube script');
+        };
+        document.head.appendChild(youtubeScript);
+    }
+
+    // Load LinkedIn Insight tag
+    if (linkedinId) {
+        console.log('LinkedIn script is being loaded');
+        const linkedinScript = document.createElement('script');
+        linkedinScript.type = 'text/javascript';
+        linkedinScript.src = `https://snap.licdn.com/li.lms-analytics/insight.min.js`;
+        linkedinScript.onload = function () {
+            console.log('LinkedIn Insight Tag script loaded successfully');
+            window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
+            window._linkedin_data_partner_ids.push(linkedinId);
+        };
+        linkedinScript.onerror = function () {
+            console.error('Failed to load LinkedIn Insight Tag');
+        };
+        document.head.appendChild(linkedinScript);
+    }
+
+    // Load TikTok Pixel
+    if (tiktokPixelId) {
+        console.log('TikTok Pixel script is being loaded');
+        const tiktokScript = document.createElement('script');
+        tiktokScript.src = `https://analytics.tiktok.com/i18n/pixel/events.js`;
+        tiktokScript.onload = function () {
+            console.log('TikTok Pixel script loaded successfully');
+            window.ttq = window.ttq || [];
+            window.ttq.push(['init', tiktokPixelId]);
+            window.ttq.push(['track', 'PageView']);
+            console.log('TikTok Pixel initialized and PageView tracked');
+        };
+        tiktokScript.onerror = function () {
+            console.error('Failed to load TikTok Pixel');
+        };
+        document.head.appendChild(tiktokScript);
+    }
+}
 
 // Function to push consent to GTM dataLayer
 function pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted) {
@@ -124,13 +193,16 @@ function updateConsent() {
 
     // Push consent status to GTM Data Layer
     pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted);
-
-    // Load tracking scripts conditionally based on Marketing consent
+  // Load tracking scripts conditionally based on Marketing consent
     if (marketingGranted) {
         const googleId = cookieBanner.getAttribute('data-google-id');
         const metaId = cookieBanner.getAttribute('data-meta-id');
         const zohoScriptURL = cookieBanner.getAttribute('data-zoho-script');
-        loadScripts(googleId, metaId, zohoScriptURL);
+        const hotjarId = cookieBanner.getAttribute('data-hotjar-id');
+        const youtubeScriptURL = cookieBanner.getAttribute('data-youtube-url');
+        const linkedinId = cookieBanner.getAttribute('data-linkedin-id');
+        const tiktokPixelId = cookieBanner.getAttribute('data-tiktok-id');
+        loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL, linkedinId, tiktokPixelId);
     } else {
         console.warn('Marketing cookies not granted, skipping script loading.');
     }
