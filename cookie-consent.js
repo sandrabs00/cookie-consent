@@ -1,154 +1,77 @@
 console.log('Script loaded successfully');
 
 // Function to load scripts dynamically based on data attributes
-function loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL, linkedinId, tiktokPixelId) {
-    console.log(`Google ID: ${googleId}`);
-    console.log(`Meta ID: ${metaId}`);
-    console.log(`Zoho URL: ${zohoScriptURL}`);
-    console.log(`Hotjar ID: ${hotjarId}`);
-    console.log(`YouTube URL: ${youtubeScriptURL}`);
-    console.log(`LinkedIn ID: ${linkedinId}`);
-    console.log(`TikTok Pixel ID: ${tiktokPixelId}`);
+function loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeId, linkedinId, tiktokPixelId) {
+    console.log('Loading scripts...');
+    console.log(`Google ID: ${googleId}, Meta ID: ${metaId}, Zoho URL: ${zohoScriptURL}, Hotjar ID: ${hotjarId}, YouTube ID: ${youtubeId}, LinkedIn ID: ${linkedinId}, TikTok Pixel ID: ${tiktokPixelId}`);
 
     // Load Google script
     if (googleId) {
-        console.log('Google script is being loaded');
+        console.log('Loading Google script');
         const googleScript = document.createElement('script');
         googleScript.src = `https://www.googletagmanager.com/gtag/js?id=${googleId}`;
-        googleScript.onload = function () {
-            console.log('Google script loaded successfully');
-            window.dataLayer = window.dataLayer || [];
-            function gtag() { dataLayer.push(arguments); }
-            gtag('js', new Date());
-            gtag('config', googleId);
-            console.log('Google gtag configuration triggered');
-        };
-        googleScript.onerror = function () {
-            console.error('Failed to load Google script');
-        };
+        googleScript.onload = () => console.log('Google script loaded');
+        googleScript.onerror = () => console.error('Failed to load Google script');
         document.head.appendChild(googleScript);
     }
 
-    // Load Meta script
-    if (metaId && !window.fbq) {
-        console.log('Meta script is being loaded');
+    // Load Meta (Facebook) script
+    if (metaId) {
+        console.log('Loading Meta script');
         const metaScript = document.createElement('script');
-        metaScript.src = `https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v12.0&appId=${metaId}&autoLogAppEvents=1`;
-        metaScript.onload = function () {
-            console.log('Meta script loaded successfully');
-            !function (f, b, e, v, n, t, s) {
-                if (f.fbq) return; n = f.fbq = function () {
-                    n.callMethod ?
-                        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                };
-                if (!f._fbq) f._fbq = n;
-                n.push = n;
-                n.loaded = !0;
-                n.version = '2.0';
-                n.queue = [];
-                t = b.createElement(e);
-                t.async = !0;
-                t.src = v;
-                s = b.getElementsByTagName(e)[0];
-                s.parentNode.insertBefore(t, s);
-            }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', metaId);  // Correct ID is dynamically loaded
-            fbq('track', 'PageView');
-            console.log('Meta Pixel initialized and PageView tracked');
-        };
-        metaScript.onerror = function () {
-            console.error('Failed to load Meta script');
-        };
+        metaScript.src = `https://connect.facebook.net/en_US/fbevents.js#${metaId}`;
+        metaScript.onload = () => console.log('Meta script loaded');
+        metaScript.onerror = () => console.error('Failed to load Meta script');
         document.head.appendChild(metaScript);
-    } else if (window.fbq) {
-        console.log('Meta Pixel is already loaded, skipping duplicate load');
     }
 
     // Load Zoho script
     if (zohoScriptURL) {
-        console.log('Zoho script is being loaded');
+        console.log('Loading Zoho script');
         const zohoScript = document.createElement('script');
         zohoScript.src = zohoScriptURL;
-        zohoScript.onload = function () {
-            console.log('Zoho script loaded successfully');
-            window.dataLayer.push({
-                'event': 'pageview',
-                'pagePath': window.location.pathname,
-                'pageTitle': document.title,
-            });
-            console.log('Page view event pushed to data layer for Zoho');
-        };
-        zohoScript.onerror = function () {
-            console.error('Failed to load Zoho script');
-        };
+        zohoScript.onload = () => console.log('Zoho script loaded');
+        zohoScript.onerror = () => console.error('Failed to load Zoho script');
         document.head.appendChild(zohoScript);
     }
 
     // Load Hotjar script
     if (hotjarId) {
-        console.log(`Hotjar script is being loaded with ID: ${hotjarId}`);
+        console.log('Loading Hotjar script');
         const hotjarScript = document.createElement('script');
         hotjarScript.src = `https://static.hotjar.com/c/hotjar-${hotjarId}.js?sv=6`;
-        hotjarScript.onload = function () {
-            console.log('Hotjar script loaded successfully');
-            window.hj = window.hj || function () { (hj.q = hj.q || []).push(arguments) };
-            hj('trigger', hotjarId);
-            console.log('Hotjar tracking initiated with ID:', hotjarId);
-        };
-        hotjarScript.onerror = function () {
-            console.error('Failed to load Hotjar script');
-        };
+        hotjarScript.onload = () => console.log('Hotjar script loaded');
+        hotjarScript.onerror = () => console.error('Failed to load Hotjar script');
         document.head.appendChild(hotjarScript);
-    } else {
-        console.warn('Hotjar ID not provided');
     }
 
-    // Load YouTube embed API
-    if (youtubeScriptURL) {
-        console.log('YouTube script is being loaded');
+    // Load YouTube script
+    if (youtubeId) {
+        console.log('Loading YouTube script');
         const youtubeScript = document.createElement('script');
-        youtubeScript.src = youtubeScriptURL;
-        youtubeScript.onload = function () {
-            console.log('YouTube script loaded successfully');
-        };
-        youtubeScript.onerror = function () {
-            console.error('Failed to load YouTube script');
-        };
+        youtubeScript.src = `https://www.youtube.com/iframe_api`;
+        youtubeScript.onload = () => console.log('YouTube script loaded');
+        youtubeScript.onerror = () => console.error('Failed to load YouTube script');
         document.head.appendChild(youtubeScript);
     }
 
-    // Load LinkedIn Insight tag
+    // Load LinkedIn script
     if (linkedinId) {
-        console.log('LinkedIn script is being loaded');
+        console.log('Loading LinkedIn script');
         const linkedinScript = document.createElement('script');
         linkedinScript.src = `https://snap.licdn.com/li.lms-analytics/insight.min.js`;
-        linkedinScript.onload = function () {
-            console.log('LinkedIn Insight Tag script loaded successfully');
-            window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
-            window._linkedin_data_partner_ids.push(linkedinId);
-            console.log(`LinkedIn tracking initialized with ID: ${linkedinId}`);
-        };
-        linkedinScript.onerror = function () {
-            console.error('Failed to load LinkedIn Insight Tag');
-        };
+        linkedinScript.onload = () => console.log('LinkedIn script loaded');
+        linkedinScript.onerror = () => console.error('Failed to load LinkedIn script');
         document.head.appendChild(linkedinScript);
     }
 
-    // Load TikTok Pixel
+    // Load TikTok Pixel script
     if (tiktokPixelId) {
-        console.log('TikTok Pixel script is being loaded');
+        console.log('Loading TikTok Pixel script');
         const tiktokScript = document.createElement('script');
-        tiktokScript.src = `https://analytics.tiktok.com/i18n/pixel/events.js`;
-        tiktokScript.onload = function () {
-            console.log('TikTok Pixel script loaded successfully');
-            window.ttq = window.ttq || [];
-            window.ttq.push(['init', tiktokPixelId]);
-            window.ttq.push(['track', 'PageView']);
-            console.log('TikTok Pixel initialized and PageView tracked');
-        };
-        tiktokScript.onerror = function () {
-            console.error('Failed to load TikTok Pixel');
-        };
+        tiktokScript.src = `https://analytics.tiktok.com/i18n/pixel/sdk.js?sdkid=${tiktokPixelId}`;
+        tiktokScript.onload = () => console.log('TikTok Pixel script loaded');
+        tiktokScript.onerror = () => console.error('Failed to load TikTok Pixel script');
         document.head.appendChild(tiktokScript);
     }
 }
@@ -156,23 +79,22 @@ function loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL
 // Push consent to GTM dataLayer
 function pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted) {
     window.dataLayer = window.dataLayer || [];
-    
     window.dataLayer.push({
         'event': 'cookie_consent_update',
         'preferences_storage': preferencesGranted ? 'granted' : 'denied',
         'analytics_storage': statisticsGranted ? 'granted' : 'denied',
         'ad_storage': marketingGranted ? 'granted' : 'denied'
     });
-    
     console.log('Consent data pushed to GTM Data Layer');
 }
 
 // Handle consent update
 function updateConsent() {
-    const cookieBanner = document.getElementById('cookie-banner');
+    console.log('Updating consent...');
 
+    const cookieBanner = document.getElementById('cookie-banner');
     if (!cookieBanner) {
-        console.error("Cookie banner element not found");
+        console.error('Cookie banner element not found');
         return;
     }
 
@@ -180,9 +102,7 @@ function updateConsent() {
     const statisticsGranted = document.querySelector('.statistics-checkbox input')?.checked || false;
     const marketingGranted = document.querySelector('.marketing-checkbox input')?.checked || false;
 
-    console.log('Preferences Granted:', preferencesGranted);
-    console.log('Statistics Granted:', statisticsGranted);
-    console.log('Marketing Granted:', marketingGranted);
+    console.log('Preferences:', preferencesGranted, 'Statistics:', statisticsGranted, 'Marketing:', marketingGranted);
 
     localStorage.setItem('preferences_storage', preferencesGranted ? 'granted' : 'denied');
     localStorage.setItem('analytics_storage', statisticsGranted ? 'granted' : 'denied');
@@ -190,30 +110,47 @@ function updateConsent() {
 
     pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted);
 
+    // Load scripts only if marketing consent is granted
     if (marketingGranted) {
         const googleId = cookieBanner.getAttribute('data-google-id');
         const metaId = cookieBanner.getAttribute('data-meta-id');
         const zohoScriptURL = cookieBanner.getAttribute('data-zoho-script');
         const hotjarId = cookieBanner.getAttribute('data-hotjar-id');
-        const youtubeScriptURL = cookieBanner.getAttribute('data-youtube-url');
+        const youtubeId = cookieBanner.getAttribute('data-youtube-id');
         const linkedinId = cookieBanner.getAttribute('data-linkedin-id');
         const tiktokPixelId = cookieBanner.getAttribute('data-tiktok-id');
-        loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL, linkedinId, tiktokPixelId);
+        loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeId, linkedinId, tiktokPixelId);
     } else {
-        console.warn('Marketing cookies not granted, skipping script loading.');
+        console.warn('Marketing consent not granted');
     }
 
-    cookieBanner.classList.add('hidden');
+    cookieBanner.classList.add('hidden');  // Hide banner after consent is updated
     console.log('Cookie banner hidden');
 }
 
-// Check and show zpcookie_json
+// Necessary checkbox should be disabled
+document.addEventListener('DOMContentLoaded', function () {
+    const necessaryCheckbox = document.querySelector('.necessary-checkbox input');
+    if (necessaryCheckbox) {
+        necessaryCheckbox.checked = true;
+        necessaryCheckbox.disabled = true;  // Ensure the checkbox is both checked and disabled
+        console.log('Necessary checkbox is checked and disabled');
+    } else {
+        console.error('Necessary checkbox not found');
+    }
+});
+
+// Event listener for consent acceptance (Using class 'accept-cookies')
+document.querySelector('.accept-cookies').addEventListener('click', updateConsent);
+
+// Check and show zpcookie_json (if required by Zoho)
 function checkAndShowZpCookie() {
     if (typeof zpcookie_json !== 'undefined') {
         console.log('zpcookie_json is ready, showing cookie banner');
         _zcBan.show(zpcookie_json);
     } else {
-        console.warn('zpcookie_json is not ready, retrying...');
+        console.warn('zpcookie_json is not ready');
         setTimeout(checkAndShowZpCookie, 100);
     }
 }
+
