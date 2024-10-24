@@ -149,7 +149,7 @@ function loadScripts(googleId, metaId, zohoScriptURL, hotjarId, youtubeScriptURL
         };
         document.head.appendChild(tiktokScript);
     }
-}
+
 
 // Function to push consent to GTM dataLayer
 function pushConsentToDataLayer(preferencesGranted, statisticsGranted, marketingGranted) {
